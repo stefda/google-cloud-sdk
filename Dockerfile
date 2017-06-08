@@ -1,4 +1,4 @@
-FROM alpine:3.5
+FROM docker:latest
 MAINTAINER David STEFAN <stefda@gmail.com>
 
 ARG CLOUD_SDK_VERSION=157.0.0
@@ -18,23 +18,3 @@ RUN curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cl
     gcloud config set metrics/environment github_docker_image
 
 VOLUME ["/root/.config"]
-
-ENV DOCKER_CHANNEL edge
-ENV DOCKER_VERSION 17.05.0-ce
-RUN set -ex; \
-      apk add --no-cache --virtual .fetch-deps \
-      curl \
-      tar \
-    ; \
-    curl -fL -o docker.tgz "https://download.docker.com/linux/static/${DOCKER_CHANNEL}/x86_64/docker-${DOCKER_VERSION}.tgz"; \
-      tar --extract \
-      --file docker.tgz \
-      --strip-components 1 \
-      --directory /usr/local/bin/ \
-    ; \
-    rm docker.tgz; \
-    apk del .fetch-deps; \
-    dockerd -v; \
-    docker -v
-
-CMD ["sh"]
